@@ -66,25 +66,21 @@ AskUserQuestion (선택지 2개만 제공, 자유 입력 불가):
 
 AskUserQuestion:
 ```
-커스텀 템플릿을 입력해주세요.
-## 으로 섹션을 구분하고, 각 섹션 아래에 가이드를 작성합니다.
-예시:
-## What
-- 변경 내용
-## Why
-- 변경 이유
-## How to Test
--
+사용할 섹션 이름을 쉼표로 구분하여 입력해주세요.
+예: What, Why, How to Test
 ```
 
-입력받은 템플릿에서 `##` 헤딩을 파싱하여 `sections`와 `customTemplate`을 구성한다.
+입력받은 섹션 이름들로 `## 섹션명\n-` 구조의 `customTemplate`을 자동 생성한다.
+예: `What, Why, How to Test` → `"## What\n-\n\n## Why\n-\n\n## How to Test\n-"`
 
 **Step 3: 언어 선택**
 
-AskUserQuestion:
-```
-PR 요약을 어떤 언어로 작성할까요? (en/ko/ja, 기본값: en)
-```
+AskUserQuestion (선택지 3개만 제공, 자유 입력 불가):
+- 질문: "PR 요약을 어떤 언어로 작성할까요?"
+- 선택지:
+  1. `English`
+  2. `한국어`
+  3. `日本語`
 
 **Step 4: 설정 저장**
 
@@ -129,11 +125,12 @@ git diff {baseBranch}...HEAD
 # 리모트 추적 상태
 git status -sb
 
-# 최근 머지된 PR 스타일 참고
+# 최근 머지된 PR 스타일 참고 (실패 시 무시하고 진행)
 gh pr list --state merged --limit 3 --json title,body
 ```
 
 `{baseBranch}`는 Phase 0에서 로드한 `pr.baseBranch` 값을 사용한다.
+`gh` CLI가 미설치이거나 미인증이면 최근 PR 조회만 건너뛰고 나머지 정보로 진행한다.
 
 ## Phase 2: Jira 티켓번호 추출
 
@@ -151,8 +148,12 @@ gh pr list --state merged --limit 3 --json title,body
 - `refactor/excel-sax` -> 티켓 없음
 
 **티켓번호가 없는 경우:**
-- AskUserQuestion: "브랜치에서 Jira 티켓번호를 찾을 수 없습니다. 티켓번호를 입력해주세요. (예: CSP-1234, 없으면 'skip')"
-- 'skip' 입력 시 Related 섹션의 Jira 항목을 비운다
+
+AskUserQuestion (선택지 2개만 제공, 자유 입력 불가):
+- 질문: "브랜치에서 Jira 티켓번호를 찾을 수 없습니다."
+- 선택지:
+  1. `직접 입력` — 선택 시 추가 질문으로 티켓번호를 입력받는다
+  2. `건너뛰기` — Related 섹션의 Jira 항목을 비운다
 
 ## Phase 3: PR 제목 생성
 
@@ -206,7 +207,11 @@ gh pr list --state merged --limit 3 --json title,body
 ## Phase 5: 사용자 확인 및 PR 생성
 
 1. 생성된 제목과 본문을 사용자에게 **미리보기**로 보여준다
-2. AskUserQuestion: "이 내용으로 PR을 생성할까요? (수정할 부분이 있으면 알려주세요)"
+2. AskUserQuestion (선택지 2개만 제공, 자유 입력 불가):
+   - 질문: "이 내용으로 PR을 생성할까요?"
+   - 선택지:
+     1. `생성` — PR 생성 진행
+     2. `수정 필요` — 선택 시 추가 질문으로 수정 사항을 입력받고 반영 후 다시 미리보기
 3. 사용자 승인 시:
    - 리모트에 push되지 않은 경우 `git push -u origin {branch}` 실행
    - `gh pr create` 실행:
@@ -233,6 +238,8 @@ PR 생성 완료 후:
 | 리모트 push 실패 | 에러 메시지와 함께 수동 해결 안내 |
 | PR이 이미 존재 | 기존 PR URL을 보여주고 업데이트 여부 확인 |
 | 설정 파일 JSON 파싱 실패 | 기본값으로 폴백, 사용자에게 경고 |
+| 설정 파일 저장 실패 | 에러 안내 후 기본값으로 진행, 설정은 이번 세션에서만 유효 |
+| `gh` CLI 미설치 | 최근 PR 조회만 건너뛰고 진행, PR 생성 시점에서 안내 |
 
 ## 주의사항
 
