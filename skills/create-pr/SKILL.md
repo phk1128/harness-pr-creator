@@ -22,14 +22,19 @@ user-invocable: true
 
 **Step 1: Jira 연동 여부**
 
+AskUserQuestion (선택지 2개만 제공, 자유 입력 불가):
+- 질문: "Jira 연동을 사용하시겠습니까?"
+- 선택지:
+  1. `사용하지 않음` — `jira.enabled = false`로 설정
+  2. `사용함` — 선택 시 Step 1-1로 이동
+
+**Step 1-1: Jira URL 입력 (Step 1에서 '사용함' 선택 시)**
+
 AskUserQuestion:
 ```
-Jira 연동을 사용하시겠습니까?
-사용하려면 Jira URL을 입력해주세요. (예: https://your-org.atlassian.net)
-사용하지 않으려면 'skip'을 입력해주세요.
+Jira URL을 입력해주세요. (예: https://your-org.atlassian.net)
 ```
-- URL 입력 시: `jira.enabled = true`, `jira.baseUrl = 입력값`
-- 'skip' 입력 시: `jira.enabled = false`
+- `jira.enabled = true`, `jira.baseUrl = 입력값`으로 설정
 
 **Step 2: PR 템플릿 선택**
 
