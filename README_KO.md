@@ -47,6 +47,16 @@ Claude Code 설정(`~/.claude/settings.json`)에 추가:
 }
 ```
 
+### 업데이트
+
+```bash
+# 1. 마켓플레이스 카탈로그 갱신
+claude plugin marketplace update harness-pr-creator-marketplace
+
+# 2. 플러그인 업데이트
+claude plugin update harness-pr-creator@harness-pr-creator-marketplace
+```
+
 ## 사용법
 
 ```

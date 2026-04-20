@@ -47,6 +47,16 @@ Add to your Claude Code settings (`~/.claude/settings.json`):
 }
 ```
 
+### Update
+
+```bash
+# 1. Refresh marketplace catalog
+claude plugin marketplace update harness-pr-creator-marketplace
+
+# 2. Update plugin
+claude plugin update harness-pr-creator@harness-pr-creator-marketplace
+```
+
 ## Usage
 
 ```
