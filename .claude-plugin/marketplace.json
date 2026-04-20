@@ -10,7 +10,7 @@
       "name": "harness-pr-creator",
       "source": "./",
       "description": "Automated PR creation harness. Jira ticket extraction + commit analysis + standardized PR generation.",
-      "version": "1.0.0"
+      "version": "1.4.0"
     }
   ]
 }
