@@ -1,0 +1,16 @@
+{
+  "name": "harness-pr-creator-marketplace",
+  "owner": {
+    "name": "phk1128",
+    "email": "",
+    "url": "https://github.com/phk1128"
+  },
+  "plugins": [
+    {
+      "name": "harness-pr-creator",
+      "source": "./",
+      "description": "Automated PR creation harness. Jira ticket extraction + commit analysis + standardized PR generation.",
+      "version": "1.0.0"
+    }
+  ]
+}
