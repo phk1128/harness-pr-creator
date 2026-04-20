@@ -8,23 +8,49 @@ user-invocable: true
 
 현재 브랜치의 커밋/변경 사항을 분석하여 표준 PR을 생성한다.
 
-## Phase 0: 설정 로드
+## Phase 0: 초기 설정 (온보딩)
 
-프로젝트 루트에서 설정 파일을 탐색한다:
+프로젝트 루트에서 `.claude/settings/pr-creator.json` 파일을 읽는다.
 
-1. `.claude/settings/pr-creator.json` 파일을 읽는다
-2. 파일이 없으면 **기본값**을 사용한다:
-   ```json
-   {
-     "jira": { "enabled": true, "baseUrl": "", "ticketPattern": "[A-Z]+-[0-9]+" },
-     "pr": { "titleFormat": "{type}({ticket}): {summary}", "titleMaxLength": 70, "baseBranch": "main", "language": "en" },
-     "sections": { "related": true, "summary": true, "changes": true, "impact": true, "testing": true }
-   }
-   ```
-3. `jira.enabled`가 `true`인데 `jira.baseUrl`이 비어있으면, AskUserQuestion으로 Jira URL을 물어본다:
-   - "Jira 인스턴스 URL을 입력해주세요. (예: https://your-org.atlassian.net, 없으면 'skip')"
-   - 사용자가 입력하면 해당 값을 사용한다
-   - 'skip' 입력 시 `jira.enabled = false`로 전환한다
+### 설정 파일이 존재하는 경우
+
+설정값을 로드하고 Phase 1로 진행한다.
+
+### 설정 파일이 없는 경우 (첫 실행)
+
+대화형으로 초기 설정을 진행한다:
+
+**Step 1: Jira 연동 여부**
+
+AskUserQuestion:
+```
+Jira 연동을 사용하시겠습니까?
+사용하려면 Jira URL을 입력해주세요. (예: https://your-org.atlassian.net)
+사용하지 않으려면 'skip'을 입력해주세요.
+```
+- URL 입력 시: `jira.enabled = true`, `jira.baseUrl = 입력값`
+- 'skip' 입력 시: `jira.enabled = false`
+
+**Step 2: 언어 선택**
+
+AskUserQuestion:
+```
+PR 요약을 어떤 언어로 작성할까요? (en/ko/ja, 기본값: en)
+```
+
+**Step 3: 설정 저장**
+
+수집한 설정을 `.claude/settings/pr-creator.json`에 저장한다:
+
+```json
+{
+  "jira": { "enabled": true, "baseUrl": "https://your-org.atlassian.net", "ticketPattern": "[A-Z]+-[0-9]+" },
+  "pr": { "titleFormat": "{type}({ticket}): {summary}", "titleMaxLength": 70, "baseBranch": "main", "language": "ko" },
+  "sections": { "related": true, "summary": true, "changes": true, "impact": true, "testing": true }
+}
+```
+
+설정 저장 후 "설정이 저장되었습니다. 다음부터는 이 설정이 자동으로 적용됩니다." 안내 후 Phase 1로 진행.
 
 설정 스키마 상세는 `references/config.md` 참조.
 
