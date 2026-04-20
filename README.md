@@ -38,10 +38,11 @@ Add to your Claude Code settings (`~/.claude/settings.json`):
 ## Usage
 
 ```
-/create-pr
+/create-pr              # Auto-extract ticket from branch name
+/create-pr CSP-1234     # Specify Jira ticket directly
 ```
 
-That's it. The skill will:
+The skill will:
 
 1. Load your project configuration (or use defaults)
 2. Collect branch info, commits, and diffs

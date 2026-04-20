@@ -143,9 +143,13 @@ gh pr list --state merged --limit 3 --json title,body
 
 `jira.enabled`가 `false`이면 이 Phase를 건너뛴다.
 
-브랜치명에서 `jira.ticketPattern`으로 Jira 티켓번호를 추출한다.
+**티켓번호 결정 우선순위:**
 
-**추출 예시:**
+1. **인자로 전달된 경우** — `/create-pr CSP-1234`처럼 인자가 있으면 해당 값을 바로 사용한다.
+2. **브랜치명에서 추출** — 인자가 없으면 브랜치명에서 `jira.ticketPattern`으로 추출한다.
+3. **사용자에게 질문** — 위 두 방법 모두 실패하면 AskUserQuestion으로 입력받는다.
+
+**브랜치명 추출 예시:**
 - `feature/CSP-1483-settlement-api` -> `CSP-1483`
 - `fix/CGS-234` -> `CGS-234`
 - `refactor/excel-sax` -> 티켓 없음

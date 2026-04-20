@@ -38,7 +38,8 @@ Claude Code 설정(`~/.claude/settings.json`)에 추가:
 ## 사용법
 
 ```
-/create-pr
+/create-pr              # 브랜치명에서 티켓 자동 추출
+/create-pr CSP-1234     # Jira 티켓 직접 지정
 ```
 
 스킬이 자동으로:
