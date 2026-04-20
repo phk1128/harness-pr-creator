@@ -17,15 +17,27 @@
 
 ## 설치
 
+### 방법 1: CLI (권장)
+
+```bash
+# 1. 마켓플레이스 등록
+/plugin marketplace add phk1128/harness-pr-creator
+
+# 2. 플러그인 설치
+/plugin install harness-pr-creator@phk1128-harness-pr-creator
+```
+
+### 방법 2: 수동 설정
+
 Claude Code 설정(`~/.claude/settings.json`)에 추가:
 
 ```json
 {
   "enabledPlugins": {
-    "harness-pr-creator@your-marketplace": true
+    "harness-pr-creator@phk1128-harness-pr-creator": true
   },
   "extraKnownMarketplaces": {
-    "your-marketplace": {
+    "phk1128-harness-pr-creator": {
       "source": {
         "source": "github",
         "repo": "phk1128/harness-pr-creator"

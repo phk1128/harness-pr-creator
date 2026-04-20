@@ -17,15 +17,27 @@ A skill-based harness that analyzes your branch's commits and diffs to automatic
 
 ## Installation
 
+### Option 1: CLI (Recommended)
+
+```bash
+# 1. Add marketplace
+/plugin marketplace add phk1128/harness-pr-creator
+
+# 2. Install plugin
+/plugin install harness-pr-creator@phk1128-harness-pr-creator
+```
+
+### Option 2: Manual
+
 Add to your Claude Code settings (`~/.claude/settings.json`):
 
 ```json
 {
   "enabledPlugins": {
-    "harness-pr-creator@your-marketplace": true
+    "harness-pr-creator@phk1128-harness-pr-creator": true
   },
   "extraKnownMarketplaces": {
-    "your-marketplace": {
+    "phk1128-harness-pr-creator": {
       "source": {
         "source": "github",
         "repo": "phk1128/harness-pr-creator"
