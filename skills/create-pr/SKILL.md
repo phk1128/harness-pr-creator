@@ -73,16 +73,7 @@ AskUserQuestion:
 입력받은 섹션 이름들로 `## 섹션명\n-` 구조의 `customTemplate`을 자동 생성한다.
 예: `What, Why, How to Test` → `"## What\n-\n\n## Why\n-\n\n## How to Test\n-"`
 
-**Step 3: 언어 선택**
-
-AskUserQuestion (선택지 3개만 제공, 자유 입력 불가):
-- 질문: "PR 요약을 어떤 언어로 작성할까요?"
-- 선택지:
-  1. `English`
-  2. `한국어`
-  3. `日本語`
-
-**Step 4: 설정 저장**
+**Step 3: 설정 저장**
 
 수집한 설정을 `.claude/settings/pr-creator.json`에 저장한다:
 
@@ -99,8 +90,8 @@ AskUserQuestion (선택지 3개만 제공, 자유 입력 불가):
 ```json
 {
   "jira": { "enabled": false },
-  "pr": { "titleFormat": "{type}: {summary}", "titleMaxLength": 70, "baseBranch": "main", "language": "en" },
-  "customTemplate": "## What\n- 변경 내용\n\n## Why\n- 변경 이유\n\n## How to Test\n-"
+  "pr": { "titleFormat": "{type}: {summary}", "titleMaxLength": 70, "baseBranch": "main", "language": "ko" },
+  "customTemplate": "## What\n-\n\n## Why\n-\n\n## How to Test\n-"
 }
 ```
 

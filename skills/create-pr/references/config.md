@@ -39,9 +39,9 @@ Copy this file to your project's `.claude/settings/pr-creator.json` and customiz
     "titleFormat": "{type}: {summary}",
     "titleMaxLength": 70,
     "baseBranch": "main",
-    "language": "en"
+    "language": "ko"
   },
-  "customTemplate": "## What\n- 변경 내용\n\n## Why\n- 변경 이유\n\n## How to Test\n-"
+  "customTemplate": "## What\n-\n\n## Why\n-\n\n## How to Test\n-"
 }
 ```
 
@@ -60,7 +60,7 @@ Copy this file to your project's `.claude/settings/pr-creator.json` and customiz
 | `titleFormat` | string | `{type}({ticket}): {summary}` | PR title template. Available variables: `{type}`, `{ticket}`, `{summary}` |
 | `titleMaxLength` | number | `70` | Maximum character length for PR title |
 | `baseBranch` | string | `main` | Base branch to compare against |
-| `language` | string | `en` | Summary language (`en`, `ko`, `ja`) |
+| `language` | string | `ko` | Summary language (`en`, `ko`, `ja`). Change in config file if needed. |
 
 ### sections
 | Field | Type | Default | Description |
