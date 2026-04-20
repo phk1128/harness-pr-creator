@@ -41,29 +41,28 @@ Jira URL을 입력해주세요. (예: https://your-org.atlassian.net)
 AskUserQuestion (선택지 2개만 제공, 자유 입력 불가):
 - 질문: "PR 본문 템플릿을 선택해주세요."
 - 선택지:
-  1. `표준 템플릿 (Related → Summary → Changes → Impact → Testing)`
+  1. `표준 템플릿`
   2. `커스텀 템플릿`
 
-- `1` 선택 시: 아래 표준 템플릿 미리보기를 보여준 뒤 확인을 받는다:
-  ```markdown
-  ## Related
-  - Jira: [CSP-1234](https://your-org.atlassian.net/browse/CSP-1234)
+`1` 선택 시 → Step 2-1로 이동
+`2` 선택 시 → Step 2-2로 이동
 
-  ## Summary
-  - 주요 변경 내용 요약
+**Step 2-1: 표준 템플릿 확인 (1 선택 시)**
 
-  ## Changes
-  - `path/to/file`: 변경 내용 설명
+사용자에게 표준 템플릿 구조를 텍스트로 출력하여 보여준다:
 
-  ## Impact
-  - 기존 대비 영향 사항
+"표준 템플릿은 다음 5개 섹션으로 구성됩니다:
+- Related: Jira 티켓 링크
+- Summary: 주요 변경 내용 요약 (2~5 bullet)
+- Changes: 변경된 파일/클래스별 설명
+- Impact: 기존 대비 영향 사항
+- Testing: 테스트 항목 (사용자 직접 작성)
 
-  ## Testing
-  -
-  ```
-- `2` 선택 시: 추가 질문으로 커스텀 템플릿을 받는다
+이 템플릿을 사용합니다."
 
-**Step 2-1: 커스텀 템플릿 입력 (2 선택 시)**
+그대로 표준 템플릿 설정을 적용하고 Step 3로 진행한다.
+
+**Step 2-2: 커스텀 템플릿 입력 (2 선택 시)**
 
 AskUserQuestion:
 ```
