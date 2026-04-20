@@ -31,14 +31,66 @@ Jira 연동을 사용하시겠습니까?
 - URL 입력 시: `jira.enabled = true`, `jira.baseUrl = 입력값`
 - 'skip' 입력 시: `jira.enabled = false`
 
-**Step 2: 언어 선택**
+**Step 2: PR 템플릿 선택**
+
+표준 템플릿 예시를 보여주고 선택을 받는다.
+
+AskUserQuestion:
+````
+PR 본문 템플릿을 선택해주세요.
+
+[1] 표준 템플릿 (기본값):
+```markdown
+## Related
+- Jira: [CSP-1234](https://your-org.atlassian.net/browse/CSP-1234)
+
+## Summary
+- 주요 변경 내용 요약
+
+## Changes
+- `path/to/file`: 변경 내용 설명
+
+## Impact
+- 기존 대비 영향 사항
+
+## Testing
+-
+```
+
+[2] 커스텀 템플릿:
+직접 템플릿을 입력합니다. 섹션 제목을 ## 으로 구분하여 작성해주세요.
+
+번호를 입력해주세요. (1 또는 2)
+````
+
+- `1` 선택 시: 표준 템플릿 사용 (기본 sections 설정)
+- `2` 선택 시: 추가 질문으로 커스텀 템플릿을 받는다
+
+**Step 2-1: 커스텀 템플릿 입력 (2 선택 시)**
+
+AskUserQuestion:
+```
+커스텀 템플릿을 입력해주세요.
+## 으로 섹션을 구분하고, 각 섹션 아래에 가이드를 작성합니다.
+예시:
+## What
+- 변경 내용
+## Why
+- 변경 이유
+## How to Test
+-
+```
+
+입력받은 템플릿에서 `##` 헤딩을 파싱하여 `sections`와 `customTemplate`을 구성한다.
+
+**Step 3: 언어 선택**
 
 AskUserQuestion:
 ```
 PR 요약을 어떤 언어로 작성할까요? (en/ko/ja, 기본값: en)
 ```
 
-**Step 3: 설정 저장**
+**Step 4: 설정 저장**
 
 수집한 설정을 `.claude/settings/pr-creator.json`에 저장한다:
 
@@ -46,7 +98,17 @@ PR 요약을 어떤 언어로 작성할까요? (en/ko/ja, 기본값: en)
 {
   "jira": { "enabled": true, "baseUrl": "https://your-org.atlassian.net", "ticketPattern": "[A-Z]+-[0-9]+" },
   "pr": { "titleFormat": "{type}({ticket}): {summary}", "titleMaxLength": 70, "baseBranch": "main", "language": "ko" },
-  "sections": { "related": true, "summary": true, "changes": true, "impact": true, "testing": true }
+  "sections": { "related": true, "summary": true, "changes": true, "impact": true, "testing": true },
+  "customTemplate": null
+}
+```
+
+커스텀 템플릿 선택 시:
+```json
+{
+  "jira": { "enabled": false },
+  "pr": { "titleFormat": "{type}: {summary}", "titleMaxLength": 70, "baseBranch": "main", "language": "en" },
+  "customTemplate": "## What\n- 변경 내용\n\n## Why\n- 변경 이유\n\n## How to Test\n-"
 }
 ```
 
@@ -103,7 +165,11 @@ gh pr list --state merged --limit 3 --json title,body
 
 ## Phase 4: PR 본문 생성
 
-전체 diff와 커밋 히스토리를 분석하여 아래 템플릿을 채운다. `sections` 설정에서 `false`인 섹션은 생략한다.
+전체 diff와 커밋 히스토리를 분석하여 템플릿을 채운다.
+
+### 표준 템플릿 사용 시 (`customTemplate`이 `null`)
+
+`sections` 설정에서 `false`인 섹션은 생략한다.
 
 ```markdown
 ## Related
@@ -129,6 +195,13 @@ gh pr list --state merged --limit 3 --json title,body
 - **Changes**: 변경된 파일/클래스 경로를 백틱으로 감싸고, 각각 어떤 변화가 있는지 서술. 관련 파일끼리 그룹핑.
 - **Impact**: 기존 동작과 비교해서 달라지는 점, 호환성/성능/보안 영향.
 - **Testing**: 비워둔다 (사용자가 직접 채움).
+
+### 커스텀 템플릿 사용 시 (`customTemplate`이 존재)
+
+`customTemplate`의 `##` 섹션 구조를 유지하면서, diff와 커밋 분석 결과로 각 섹션을 채운다.
+- Jira 연동이 활성화되어 있으면 본문 최상단에 `## Related` 섹션을 추가한다.
+- 각 섹션의 의도를 섹션 제목에서 유추하여 적절한 내용을 작성한다.
+- `pr.language` 설정에 맞는 언어로 작성한다.
 
 ## Phase 5: 사용자 확인 및 PR 생성
 

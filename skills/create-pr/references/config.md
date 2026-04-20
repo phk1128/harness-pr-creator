@@ -28,6 +28,23 @@ Copy this file to your project's `.claude/settings/pr-creator.json` and customiz
 }
 ```
 
+## Full Example (with custom template)
+
+```json
+{
+  "jira": {
+    "enabled": false
+  },
+  "pr": {
+    "titleFormat": "{type}: {summary}",
+    "titleMaxLength": 70,
+    "baseBranch": "main",
+    "language": "en"
+  },
+  "customTemplate": "## What\n- 변경 내용\n\n## Why\n- 변경 이유\n\n## How to Test\n-"
+}
+```
+
 ## Field Descriptions
 
 ### jira
@@ -53,3 +70,8 @@ Copy this file to your project's `.claude/settings/pr-creator.json` and customiz
 | `changes` | boolean | `true` | Include Changes section |
 | `impact` | boolean | `true` | Include Impact section |
 | `testing` | boolean | `true` | Include Testing section |
+
+### customTemplate
+| Field | Type | Default | Description |
+|-------|------|---------|-------------|
+| `customTemplate` | string \| null | `null` | Custom PR body template. Use `##` headings to define sections. When set, `sections` config is ignored and this template is used instead. |
