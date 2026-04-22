@@ -14,7 +14,7 @@ user-invocable: true
 
 ### 설정 파일이 존재하는 경우
 
-설정값을 로드하고 Phase 1로 진행한다.
+설정값을 로드하고 Phase 0.5로 진행한다.
 
 ### 설정 파일이 없는 경우 (첫 실행)
 
@@ -73,7 +73,16 @@ AskUserQuestion:
 입력받은 섹션 이름들로 `## 섹션명\n-` 구조의 `customTemplate`을 자동 생성한다.
 예: `What, Why, How to Test` → `"## What\n-\n\n## Why\n-\n\n## How to Test\n-"`
 
-**Step 3: 설정 저장**
+**Step 3: 기본 base 브랜치 설정**
+
+AskUserQuestion:
+```
+PR의 기본 base 브랜치를 입력해주세요. (미입력 시 main)
+```
+- 입력값이 있으면 `pr.baseBranch = 입력값`으로 설정
+- 입력값이 없거나 빈 문자열이면 `pr.baseBranch = "main"`으로 설정
+
+**Step 4: 설정 저장**
 
 수집한 설정을 `.claude/settings/pr-creator.json`에 저장한다:
 
@@ -95,9 +104,22 @@ AskUserQuestion:
 }
 ```
 
-설정 저장 후 "설정이 저장되었습니다. 다음부터는 이 설정이 자동으로 적용됩니다." 안내 후 Phase 1로 진행.
+설정 저장 후 "설정이 저장되었습니다. 다음부터는 이 설정이 자동으로 적용됩니다." 안내 후 Phase 0.5로 진행.
 
 설정 스키마 상세는 `references/config.md` 참조.
+
+## Phase 0.5: base 브랜치 확인
+
+PR 생성 시마다 base 브랜치를 확인한다.
+
+AskUserQuestion:
+```
+base 브랜치를 입력해주세요. (미입력 시 기본값: {pr.baseBranch})
+```
+- 입력값이 있으면 이번 PR의 base 브랜치로 사용한다 (설정 파일은 변경하지 않음).
+- 입력값이 없거나 빈 문자열이면 `pr.baseBranch` 설정값을 사용한다.
+
+이후 결정된 base 브랜치를 `{baseBranch}`로 사용하여 Phase 1로 진행한다.
 
 ## Phase 1: 컨텍스트 수집
 
@@ -120,7 +142,7 @@ git status -sb
 gh pr list --state merged --limit 3 --json title,body
 ```
 
-`{baseBranch}`는 Phase 0에서 로드한 `pr.baseBranch` 값을 사용한다.
+`{baseBranch}`는 Phase 0.5에서 결정된 base 브랜치 값을 사용한다.
 `gh` CLI가 미설치이거나 미인증이면 최근 PR 조회만 건너뛰고 나머지 정보로 진행한다.
 
 ## Phase 2: Jira 티켓번호 추출
